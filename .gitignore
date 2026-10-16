@@ -1,0 +1,24 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python byte-compiled caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest and coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local temporary exports or sensitive datasets
+*.tmp
+*.log
+private_data/
