@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/khaingmyaelovestea/KhaingLens/main/assets/logo.svg" alt="KhaingLens Logo" width="240">
+  <img src="https://raw.githubusercontent.com/khaingmyaelovestea/KhaingLens/main/assets/khainglens_logo.svg" alt="KhaingLens Logo" width="240">
 </p>
 
 # KhaingLens
