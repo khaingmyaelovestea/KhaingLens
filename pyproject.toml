@@ -46,3 +46,6 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/khaingmyaelovestea/KhaingLens"
 Repository = "https://github.com/khaingmyaelovestea/KhaingLens.git"
+
+[tool.setuptools.packages.find]
+include = ["khainglens", "khainglens.*"]
