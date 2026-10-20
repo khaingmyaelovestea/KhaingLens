@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "khainglens"
 version = "0.1.0"
@@ -6,15 +10,11 @@ readme = "README.md"
 authors = [
     { name = "Khaing Myae Kyaw Swar Myo", email = "khaingmyaekyawswarmyo25@gmail.com" }
 ]
-
-# 1. Use a simple SPDX string expression instead of a TOML table
 license = "MIT"
-
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    # 2. Removed the deprecated "License :: OSI Approved :: MIT License" classifier here
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -23,3 +23,28 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Text Processing :: Linguistic",
 ]
+keywords = ["nlp", "burmese", "myanmar", "dataset-quality", "data-cleaning", "unicode"]
+dependencies = [
+    "pandas>=2.0.0",
+    "streamlit>=1.28.0",
+    "plotly>=5.14.0",
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+ui = [
+    "streamlit>=1.28.0",
+    "plotly>=5.14.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/khaingmyaelovestea/KhaingLens"
+Repository = "https://github.com/khaingmyaelovestea/KhaingLens.git"
+
+[tool.setuptools.packages.find]
+include = ["khainglens", "khainglens.*"]
