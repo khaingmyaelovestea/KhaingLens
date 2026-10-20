@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" width="100%" height="100%">
+  <!-- K Left Vertical Stem (Top Dark Navy Section) -->
+  <polygon points="20,20 66,20 66,84 20,130" fill="#17255A" />
+
+  <!-- L Shape (Sky Blue Vertical Stem & Horizontal Base) -->
+  <path d="M 130,20 L 176,20 L 176,194 L 242,194 L 242,240 L 130,240 Z" fill="#62B2E5" />
+
+  <!-- K Main Body (Bottom Stem + Upper Diagonal Arm + Lower Diagonal Leg in Royal Blue) -->
+  <path d="M 20,130 L 130,20 L 196,20 L 96,120 L 216,240 L 150,240 L 78,168 L 66,180 L 66,240 L 20,240 Z" fill="#2663B8" />
+
+  <!-- Upper Overlap: K Upper Arm Crossing L Vertical Stem (Deep Blue) -->
+  <polygon points="130,20 176,20 176,40 130,86" fill="#14509E" />
+
+  <!-- Lower Overlap: K Lower Leg Crossing L Stem & Base (Dark Navy) -->
+  <polygon points="130,154 216,240 150,240 130,220" fill="#17255A" />
+</svg>

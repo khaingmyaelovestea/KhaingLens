@@ -1,19 +1,30 @@
-"""End-to-end integration tests for khainglens.analyzer pipeline."""
+"""End-to-end integration tests for khainglens.analyzer pipeline and sample datasets."""
+
+import csv
+import io
+import json
+from pathlib import Path
+import pytest
 
 from khainglens.analyzer import (
     analyze_dataset,
     build_record_lookup,
     inspect_dataset_bytes,
 )
-from khainglens.loader import load_dataset
+from khainglens.loader import inspect_file_schema, load_dataset
 from khainglens.models import (
     AnalysisConfig,
     AnalysisScope,
     AnomalyType,
+    FileEncodingError,
+    InputFormat,
     MalformedRecord,
     ParsedRecord,
     Severity,
+    UnsupportedFormatError,
 )
+from khainglens.reporting import generate_csv_report, generate_json_report
+from khainglens.sample_generator import generate_sample_files
 
 
 def test_complete_pipeline_jsonl_burmese_and_english_integration() -> None:
@@ -157,3 +168,81 @@ def test_csv_header_toggle_through_inspect_dataset_bytes() -> None:
 
     res_no_hdr = inspect_dataset_bytes(csv_bytes, "toggle.csv", csv_has_header=False)
     assert res_no_hdr.stats.analyzed_raw_records == 2
+
+
+def test_bundled_sample_datasets_end_to_end_workflow(tmp_path: Path) -> None:
+    """Validate all three bundled sample datasets through schema -> load -> analyze -> report export."""
+    paths = generate_sample_files(tmp_path)
+    assert len(paths) == 3
+
+    by_name = {p.name: p for p in paths}
+
+    # 1. Validate sample_burmese.csv
+    csv_bytes = by_name["sample_burmese.csv"].read_bytes()
+    csv_schema = inspect_file_schema(csv_bytes, "sample_burmese.csv", csv_has_header=True)
+    assert csv_schema.file_format == InputFormat.CSV
+    assert csv_schema.suggested_field == "text"
+
+    csv_res = inspect_dataset_bytes(csv_bytes, "sample_burmese.csv", selected_field="text")
+    csv_types = {a.issue_type for a in csv_res.anomalies}
+    assert AnomalyType.EXACT_DUPLICATE in csv_types
+    assert AnomalyType.LEADING_WHITESPACE in csv_types
+    assert AnomalyType.TRAILING_WHITESPACE in csv_types
+    assert AnomalyType.REPEATED_SPACES in csv_types
+    assert AnomalyType.ZERO_WIDTH_CHARACTER in csv_types
+    assert AnomalyType.MYANMAR_DUPLICATE_DIACRITIC in csv_types
+    assert AnomalyType.MYANMAR_SUSPECTED_ZAWGYI in csv_types
+    assert AnomalyType.EMPTY_STRING in csv_types
+    assert AnomalyType.WHITESPACE_ONLY in csv_types
+    assert AnomalyType.MALFORMED_RECORD in csv_types
+
+    # Clean valid Burmese rows (Record 1 and Record 3, 0-indexed) must have 0 anomalies
+    assert [a for a in csv_res.anomalies if a.record_index == 1] == []
+    assert [a for a in csv_res.anomalies if a.record_index == 3] == []
+
+    # 2. Validate sample_burmese.jsonl
+    jsonl_bytes = by_name["sample_burmese.jsonl"].read_bytes()
+    jsonl_res = inspect_dataset_bytes(jsonl_bytes, "sample_burmese.jsonl", selected_field="text")
+    jsonl_types = {a.issue_type for a in jsonl_res.anomalies}
+    assert AnomalyType.EXACT_DUPLICATE in jsonl_types
+    assert AnomalyType.NORMALIZED_DUPLICATE in jsonl_types
+    assert AnomalyType.UNICODE_NORMALIZATION_DIFF in jsonl_types
+    assert AnomalyType.EMBEDDED_BOM in jsonl_types
+    assert AnomalyType.ZERO_WIDTH_CHARACTER in jsonl_types
+    assert AnomalyType.EMPTY_STRING in jsonl_types
+    assert AnomalyType.MISSING_TEXT_VALUE in jsonl_types
+    assert AnomalyType.MALFORMED_RECORD in jsonl_types
+
+    # 3. Validate sample_english.txt
+    txt_bytes = by_name["sample_english.txt"].read_bytes()
+    txt_res = inspect_dataset_bytes(txt_bytes, "sample_english.txt")
+    txt_types = {a.issue_type for a in txt_res.anomalies}
+    assert AnomalyType.EXACT_DUPLICATE in txt_types
+    assert AnomalyType.UNUSUAL_UNICODE_SPACE in txt_types
+    assert AnomalyType.UNUSUAL_TAB_OR_NEWLINE in txt_types
+    assert AnomalyType.LENGTH_OUTLIER_SHORT in txt_types
+    assert AnomalyType.LENGTH_OUTLIER_LONG in txt_types
+
+    # Verify JSON and CSV exports for all three sample results parse cleanly
+    for res in (csv_res, jsonl_res, txt_res):
+        j_doc = json.loads(generate_json_report(res, include_full_text=True))
+        assert len(j_doc["anomalies"]) == res.stats.total_anomaly_findings
+        c_bytes = generate_csv_report(res, include_utf8_bom=True, include_full_text=True)
+        c_rows = list(csv.DictReader(io.StringIO(c_bytes.decode("utf-8-sig"))))
+        assert len(c_rows) == res.stats.total_anomaly_findings
+
+
+def test_privacy_error_messages_do_not_expose_sensitive_record_text() -> None:
+    """Verify file-level exceptions report structural metadata without dumping sensitive text."""
+    secret_marker = "CONFIDENTIAL_MEDICAL_RECORD_998877"
+    bad_payload = f"\xff\xfe{secret_marker}".encode("latin1", errors="ignore")
+
+    with pytest.raises(FileEncodingError) as exc_info:
+        inspect_dataset_bytes(bad_payload, "sensitive.csv")
+
+    assert secret_marker not in str(exc_info.value)
+
+    with pytest.raises(UnsupportedFormatError) as exc_info2:
+        inspect_dataset_bytes(secret_marker.encode("utf-8"), "sensitive.parquet")
+
+    assert secret_marker not in str(exc_info2.value)

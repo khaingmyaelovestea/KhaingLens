@@ -1,0 +1,35 @@
+Copyright (c) 2026 KhaingLens Contributors
+
+--- PART 1: OPEN SOURCE CORE ENGINE ---
+The core inspection engine (all files within the `khainglens/` and `tests/` directories,
+`sample_data/`, `docs/`, and `pyproject.toml`) is licensed under the MIT License:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+--- PART 2: PROPRIETARY USER INTERFACE & BRANDING ---
+The following components are strictly PROPRIETARY and are NOT covered by the MIT License:
+1. The user interface application logic and layout (`app.py`)
+2. The Streamlit configuration and custom CSS (`.streamlit/`)
+3. All visual branding, logos, icons, and interface screenshots (`assets/`)
+
+These files may be run locally for personal or internal organizational use alongside
+the core engine, but you may NOT copy, modify, distribute, or host these interface
+components or designs in your own external applications without explicit written permission
+from the project author. All rights reserved.

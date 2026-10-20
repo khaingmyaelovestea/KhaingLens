@@ -22,3 +22,11 @@ Thumbs.db
 *.tmp
 *.log
 private_data/
+
+# Python Packaging / Build Artifacts
+dist/
+build/
+*.egg-info/
+
+# Temporary Export Reports
+*report.csv

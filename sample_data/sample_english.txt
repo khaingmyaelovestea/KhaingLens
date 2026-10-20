@@ -1,0 +1,15 @@
+High-quality text corpora require systematic inspection before model training.
+Dataset curation prevents silent tokenization failures and train-test leakage.
+High-quality text corpora require systematic inspection before model training.
+  This sentence has leading and trailing ASCII whitespace characters.   
+Multiple   consecutive    spaces often appear after OCR or HTML tag stripping.
+Invisible​zero-width​spaces can split single English words into fragments.
+Non-breaking spaces prevent normal whitespace splitting in naive pipelines.
+Embedded	tab	characters inside a plain text line may indicate unparsed TSV data.
+
+     
+OK
+Clean validation benchmark sentence number one with standard spacing.
+Clean validation benchmark sentence number two with standard spacing.
+Clean validation benchmark sentence number three with standard spacing.
+An unusually long paragraph concatenated onto a single physical line can skew sequence length distributions, exhaust transformer context windows during batching, and indicate that newline delimiters were accidentally stripped during upstream document ingestion or PDF text extraction workflows.

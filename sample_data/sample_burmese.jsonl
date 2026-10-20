@@ -1,0 +1,9 @@
+{"id": "my_01", "text": "မြန်မာဘာသာစကား သုတေသနအတွက် အရည်အသွေးမြင့် ဒေတာစုစည်းမှု။", "source": "synthetic"}
+{"id": "my_02", "text": "မြန်မာဘာသာစကား သုတေသနအတွက် အရည်အသွေးမြင့် ဒေတာစုစည်းမှု။", "source": "synthetic_dup"}
+{"id": "my_03_nfc_canonical", "text": "ကျွန်ုပ်တို့၏ လုပ်ငန်းစဉ်က့် အောင်မြင်ပါစေ။", "source": "nfc_order"}
+{"id": "my_04_non_nfc_order", "text": "ကျွန်ုပ်တို့၏ လုပ်ငန်းစဉ်က့် အောင်မြင်ပါစေ။", "source": "non_nfc_order"}
+{"id": "my_05_bom_zwsp", "text": "﻿ဖိုင်ပေါင်းစပ်ရာမှ ပါဝင်လာသော ​ အမှတ်အသား။", "source": "concat_artifact"}
+{"id": "my_06_empty", "text": "", "source": "blank"}
+{"id": "my_07_null", "text": null, "source": "missing"}
+{"id": "my_08_broken_json", "text": unquoted_value_error}
+{"id": "my_09_clean", "text": "ဤစာကြောင်းသည် မည်သည့်ချို့ယွင်းချက်မှ မရှိသော စံနမူနာ စာကြောင်းဖြစ်ပါသည်။", "source": "clean"}
